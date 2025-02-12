@@ -23,40 +23,63 @@ pick_solution <- function(x){
 solution <- pick_solution(solution_list)
 
 #this function will be called in the play_wordle function to evaluate the users guess
-evalueate_guess <- function(guessSplit, solution){
+evaluate_guess <- function(guessSplit, solution){
   wordLength <- length(solution)
   eval <- rep("-", wordLength)
   for (i in 1:wordLength) {
     if(guessSplit[i] == solution[i]) {
       eval[i] <- "*"
+      solution[i] <- "-"
     }
-    else if(guessSplit[i])
   }
-  
+  for (i in 1:wordLength){
+    if(eval[i] != "*"){
+      check <- match(guessSplit[i], solution)
+      if(!is.na(check)){
+        eval[i] <- "+"
+        solution[check] <- "-"
+      }
+    }
+  }
+  eval
 }
 
 #this is the function for playing worlde
-play_wordle <- function(solution, valid_list, num_guesses=6){
+play_wordle <- function(solution, solution_list, num_guesses=6){
   print(paste("Welcome to Wordle. You have", num_guesses, "chances to guess the 5-letter word"))
   #Start guessing
   guessNum <- 0
   lettersLeft <- toupper(LETTERS)
+  #this loop runs as long as the number of guesses entered is less than the number of guesses
+  #allowed by the game
   while(guessNum < num_guesses) {
     #show letters left
     print(paste(c("Letters left: ", lettersLeft), collapse = " "))
     
-    #user adds a guess
+    #user adds a guess and the number of guesses is updated 
     guessNum <- guessNum + 1
     guess <- readline(paste0("Enter guess ", guessNum, ": "))
     guess <- toupper(guess)
     guessSplit <- strsplit(guess, "")[[1]]
     
+    #evaluate function is called
+    evalGuess <- evaluate_guess(guessSplit, solution)
+    #the keyboard is reduced to show what letters the user has not used
     lettersLeft <- setdiff(lettersLeft, guessSplit)
+    #the users guess is printed above the evaluation
+    print(paste(strsplit(guess, "")[[1]], collapse = " "))
+    print(paste(evalGuess, collapse = " "))
     
-    
+    if(all(evalGuess == "*")) {
+      print("Yay! You solved the wordle!")
+      return(print(paste("You got the answer in ", guessNum, "guesses!")))
+    }
   }
-  
+  print(paste("You ran out of chances! The correct answer was", paste(solution, collapse = "")))
+  return(print(paste("Guesses Used: ", guessNum)))
   
   
 }
 play_wordle(solution)
+happy
+sells
