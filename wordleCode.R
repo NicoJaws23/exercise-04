@@ -1,7 +1,7 @@
 library(tidyverse)
 library(sjmisc)
 
-load_dictionary <- function(x, name) {
+load_dictionary <- function(x) {
   name <- read.table(x, header = TRUE)
 }
 valid_list <- load_dictionary("collins-scrabble-words-2019.txt")
@@ -30,7 +30,7 @@ evaluate_guess <- function(guessSplit, solution){
     if(guessSplit[i] == solution[i]) {
       eval[i] <- "*"
       solution[i] <- "-"
-    }
+      }
   }
   for (i in 1:wordLength){
     if(eval[i] != "*"){
@@ -39,7 +39,7 @@ evaluate_guess <- function(guessSplit, solution){
         eval[i] <- "+"
         solution[check] <- "-"
       }
-    }
+  }
   }
   eval
 }
@@ -77,9 +77,5 @@ play_wordle <- function(solution, solution_list, num_guesses=6){
   }
   print(paste("You ran out of chances! The correct answer was", paste(solution, collapse = "")))
   return(print(paste("Guesses Used: ", guessNum)))
-  
-  
 }
 play_wordle(solution)
-happy
-sells
