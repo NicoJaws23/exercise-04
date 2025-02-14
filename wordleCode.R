@@ -4,14 +4,16 @@ library(sjmisc)
 load_dictionary <- function(x) {
   name <- read.table(x, header = TRUE)
 }
-valid_list <- load_dictionary("collins-scrabble-words-2019.txt")
+f1 <- "https://raw.githubusercontent.com/difiore/ada-datasets/refs/heads/main/collins-scrabble-words-2019.txt"
+valid_list <- load_dictionary(f1)
 #starts at 9884 obervations
-solution_list1 <- load_dictionary("google-10000-english-usa-no-swears.txt")
+f2 <- "https://raw.githubusercontent.com/difiore/ada-datasets/refs/heads/main/google-10000-english-usa-no-swears.txt"
+solution_list <- load_dictionary(f2)
 str(valid_list)
 str(solution_list)
 
 
-solution_list <- intersection(valid_list, solution_list) #brings it down to 8336 obs
+solution_list <- intersect(valid_list, solution_list) #brings it down to 8336 obs
 
 #this function picks a random word from the list that is 5 characters long
 pick_solution <- function(x){
@@ -80,4 +82,4 @@ play_wordle <- function(solution, solution_list, num_guesses=6){
   return(print(paste("Guesses Used: ", guessNum)))
 }
 
-play_wordle(solution, solution_list, num_guesses = 6)
+Wordle <- play_wordle(solution, solution_list, num_guesses = 6)

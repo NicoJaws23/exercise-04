@@ -37,12 +37,16 @@ We will need to large data sets to do this project, those being collins-scrabble
 load_dictionary <- function(x) {
   name <- read.table(x, header = TRUE)
 }
-valid_list <- load_dictionary("collins-scrabble-words-2019.txt") #starts with 279496 observations
-solution_list1 <- load_dictionary("google-10000-english-usa-no-swears.txt") #starts at 9884 observations
+f1 <- "https://raw.githubusercontent.com/difiore/ada-datasets/refs/heads/main/collins-scrabble-words-2019.txt"
+valid_list <- load_dictionary(f1)
+#starts at 9884 obervations
+f2 <- "https://raw.githubusercontent.com/difiore/ada-datasets/refs/heads/main/google-10000-english-usa-no-swears.txt"
+solution_list <- load_dictionary(f2)
 str(valid_list)
 str(solution_list)
 
-solution_list <- intersect(valid_list, solution_list) #brings it down to 8336 observatuions
+
+solution_list <- intersect(valid_list, solution_list) #brings it down to 8336 obs
 ```
 
 The collins-scrabble-words-2019 has a total of 279,496 words, of these 12,972 are 5-letter words
@@ -139,8 +143,8 @@ play_wordle <- function(solution, solution_list, num_guesses=6){
 
 ## Playing The Game
 
-In order to play the game, the user runs this line of code which calls the play_wordle function with all the necessary arguments.
+In order to play the game, the user runs this line of code which calls the play_wordle function with all the necessary arguments. I have my code set up as a comment right now because when I tried to render this page with it active, the loading got stuck at 92% FOREVER. I took my dog for a 15 minute walk and it was still on 92% but having it as a comment allowed the document to render right away. If the user wants to play the game they can just remove the \# in their R-Studio
 
 ```{r}
-play_wordle(solution, solution_list, num_guesses = 6)
+#Wordle <- play_wordle(solution, solution_list, num_guesses = 6)
 ```
