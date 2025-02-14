@@ -23,25 +23,17 @@ pick_solution <- function(x){
 solution <- pick_solution(solution_list)
 
 #this function will be called in the play_wordle function to evaluate the users guess
-evaluate_guess <- function(guessSplit, solution){
-  wordLength <- length(solution)
-  eval <- rep("-", wordLength)
-  for (i in 1:wordLength) {
-    if(guessSplit[i] == solution[i]) {
-      eval[i] <- "*"
-      solution[i] <- "-"
-      }
+evaluate_guess <- function(guess, solution){
+  guess <- toupper(guess)
+  guess <- str_split_1(guess, "")
+  e <- rep("-", 5)
+  for(i in 1:5){
+    if(guess[i] %in% solution ==F){}
+    else{ if (guess[i] != solution[i]) {e[i] = "+"}
+      else{e[i] = "*"}}
   }
-  for (i in 1:wordLength){
-    if(eval[i] != "*"){
-      check <- match(guessSplit[i], solution)
-      if(!is.na(check)){
-        eval[i] <- "+"
-        solution[check] <- "-"
-      }
-  }
-  }
-  eval
+  e <- paste(e) #collapse = "")
+  return(e)
 }
 
 #this is the function for playing worlde
@@ -60,11 +52,15 @@ play_wordle <- function(solution, solution_list, num_guesses=6){
     guessNum <- guessNum + 1
     guess <- readline(paste0("Enter guess ", guessNum, ": "))
     guess <- toupper(guess)
-    guessSplit <- strsplit(guess, "")[[1]]
-    
+    while(guess %in% solution_list == F) {
+      guess <- readline("This guess is not in the list of possible guesses. Try again: ")
+    }
     #evaluate function is called
-    evalGuess <- evaluate_guess(guessSplit, solution)
+    evalGuess <- evaluate_guess(guess, solution)
+    guessSplit <- str_split_1(guess, "")
+    guessSplit <- toupper(guessSplit)
     #the keyboard is reduced to show what letters the user has not used
+    
     lettersLeft <- setdiff(lettersLeft, guessSplit)
     #the users guess is printed above the evaluation
     print(paste(strsplit(guess, "")[[1]], collapse = " "))
@@ -78,4 +74,8 @@ play_wordle <- function(solution, solution_list, num_guesses=6){
   print(paste("You ran out of chances! The correct answer was", paste(solution, collapse = "")))
   return(print(paste("Guesses Used: ", guessNum)))
 }
-play_wordle(solution)
+play_wordle(solution, solution_list, num_guesses = 6)
+pairs
+names
+/
+  
