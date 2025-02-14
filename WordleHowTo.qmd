@@ -16,7 +16,9 @@ In order to play wordle, we need to.....
 
 3.  Allow the user to enter a guess at most 6 times
 
-4.  Have a way for R to evaluate each guess, provide feedback on the guess, and then return a list of letters which the user can pick from for future guesses
+4.  Have a way for R to provide the user all 26 letters of the alphabet, evaluate each guess, provide feedback on the guess, and then return a an updated list of letters the user has not tried yet which the user can pick from for future guesses
+
+5.  A way for the game to end if the user either gets the correct answer or runs out of chances to guess. If the user runs out of chances, the code will inform the user they lost and what the correct answer was.
 
 ## Preliminaries
 
@@ -35,13 +37,19 @@ We will need to large data sets to do this project, those being collins-scrabble
 load_dictionary <- function(x) {
   name <- read.table(x, header = TRUE)
 }
-valid_list <- load_dictionary("collins-scrabble-words-2019.txt") #starts with 279496 obsrvations
-solution_list <- load_dictionary("google-10000-english-usa-no-swears.txt") #starts at 9884 obervations
+valid_list <- load_dictionary("collins-scrabble-words-2019.txt") #starts with 279496 observations
+solution_list1 <- load_dictionary("google-10000-english-usa-no-swears.txt") #starts at 9884 observations
 str(valid_list)
 str(solution_list)
 
-solution_list <- intersect(valid_list, solution_list) #brings it down to 8336 obs
+solution_list <- intersect(valid_list, solution_list) #brings it down to 8336 observatuions
 ```
+
+The collins-scrabble-words-2019 has a total of 279,496 words, of these 12,972 are 5-letter words
+
+The google-10000-english-usa-no-swears has a total of 9,884 words, of these 1,210 are 5-letter words
+
+By using the intersect() function to ensure that the list of words is made of only of words present in path lists, we narrow down out list of total words to 8,336 words.
 
 ## Pick A Solution
 
@@ -82,7 +90,7 @@ evaluate_guess <- function(guess, solution){
 }
 ```
 
-Now, we will create the function which allows the user to play Worlde. This function has 3 arguments, the solution to the Wordle, the list of possible solutions, and the number of guesses the user is allowed to use.
+Now, we will create the function which allows the user to play Worlde. This function has 3 arguments, the solution to the Wordle, the list of possible solutions, and the number of guesses the user is allowed to use. The function first creates a field of upper case letters A through Z. Then a while loop is set up to run as long as the users number of guesses is less than 6 (num_guesses). The user is prompted to enter a guess which is checked to see if it is (A) 5 letters long and (B) a valid guess in the solution_list. The evaluate_guess function is then called to determine how the users guess compares to the solution. The users guess is then printed above the feedback from the evaluate_guess function. If the answer is correct, the user is told they completed the Wordle and told how many guesses it took them. If the guess does not match the solution, the user if prompted to guess again with a list of letters they have not tried yet. If the user runs out of guesses, they are told they lost and given the correct answer.
 
 ```{r}
 #this is the function for playing worlde
@@ -90,9 +98,8 @@ play_wordle <- function(solution, solution_list, num_guesses=6){
   print(paste("Welcome to Wordle. You have", num_guesses, "chances to guess the 5-letter word"))
   #Start guessing
   guessNum <- 0
-  lettersLeft <- toupper(LETTERS)
-  #this loop runs as long as the number of guesses entered is less than the number of guesses
-  #allowed by the game
+  lettersLeft <- toupper(LETTERS) #sets up list of letters
+  #this loop runs as long as the number of guesses entered is less than the number of guesses allowed by the game
   while(guessNum < num_guesses) {
     #show letters left
     print(paste(c("Letters left: ", lettersLeft), collapse = " "))
@@ -100,26 +107,40 @@ play_wordle <- function(solution, solution_list, num_guesses=6){
     #user adds a guess and the number of guesses is updated 
     guessNum <- guessNum + 1
     guess <- readline(paste0("Enter guess ", guessNum, ": "))
-    #guess <- toupper(guess)
-    #guessSplit <- strsplit(guess, "")[[1]]
-    
+    guess <- toupper(guess)
+    while(nchar(guess) != 5){ #guess is checked to make sure it has 5 letters, if not the user ir prompted to try again
+      guess <- readline(paste0("Your guess must have 5 letters. Try again: "))
+    }
+    # Check if the guess is in the solution list
+    while (toupper(guess) %in% solution_list[,1] == F) {  #guess is checked to make sure it is in the solution list, if not the user is prompted to try again
+      guess <- readline("This guess is not in the list of possible guesses. Try again: ")
+    }
     #evaluate function is called
     evalGuess <- evaluate_guess(guess, solution)
     guessSplit <- str_split_1(guess, "")
-    guessSplit <- toupper(guessSplit)
-    #the keyboard is reduced to show what letters the user has not used
-    
+    guessSplit <- toupper(guessSplit) #the guess is split and capitalized so that it matches the formatting of the letters
+    #the list of letters is reduced to show what letters the user has not used
     lettersLeft <- setdiff(lettersLeft, guessSplit)
+    guess <- toupper(guess) #double checking the guess is capitalized
     #the users guess is printed above the evaluation
     print(paste(strsplit(guess, "")[[1]], collapse = " "))
     print(paste(evalGuess, collapse = " "))
     
-    if(all(evalGuess == "*")) {
+    if(all(evalGuess == "*")) { #if the guess is correct, the user is told
       print("Yay! You solved the wordle!")
       return(print(paste("You got the answer in ", guessNum, "guesses!")))
     }
   }
-  print(paste("You ran out of chances! The correct answer was", paste(solution, collapse = "")))
+  #if the user runs out of guesses, they are told they lost and what the solution was
+  print(paste("You ran out of guesses! The correct answer was", paste(solution, collapse = "")))
   return(print(paste("Guesses Used: ", guessNum)))
 }
+```
+
+## Playing The Game
+
+In order to play the game, the user runs this line of code which calls the play_wordle function with all the necessary arguments.
+
+```{r}
+play_wordle(solution, solution_list, num_guesses = 6)
 ```

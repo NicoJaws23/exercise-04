@@ -6,11 +6,12 @@ load_dictionary <- function(x) {
 }
 valid_list <- load_dictionary("collins-scrabble-words-2019.txt")
 #starts at 9884 obervations
-solution_list <- load_dictionary("google-10000-english-usa-no-swears.txt")
+solution_list1 <- load_dictionary("google-10000-english-usa-no-swears.txt")
 str(valid_list)
 str(solution_list)
 
-solution_list <- intersect(valid_list, solution_list) #brings it down to 8336 obs
+
+solution_list <- intersection(valid_list, solution_list) #brings it down to 8336 obs
 
 #this function picks a random word from the list that is 5 characters long
 pick_solution <- function(x){
@@ -41,9 +42,8 @@ play_wordle <- function(solution, solution_list, num_guesses=6){
   print(paste("Welcome to Wordle. You have", num_guesses, "chances to guess the 5-letter word"))
   #Start guessing
   guessNum <- 0
-  lettersLeft <- toupper(LETTERS)
-  #this loop runs as long as the number of guesses entered is less than the number of guesses
-  #allowed by the game
+  lettersLeft <- toupper(LETTERS) #sets up list of letters
+  #this loop runs as long as the number of guesses entered is less than the number of guesses allowed by the game
   while(guessNum < num_guesses) {
     #show letters left
     print(paste(c("Letters left: ", lettersLeft), collapse = " "))
@@ -52,30 +52,32 @@ play_wordle <- function(solution, solution_list, num_guesses=6){
     guessNum <- guessNum + 1
     guess <- readline(paste0("Enter guess ", guessNum, ": "))
     guess <- toupper(guess)
-    while(guess %in% solution_list == F) {
+    while(nchar(guess) != 5){ #guess is checked to make sure it has 5 letters, if not the user ir prompted to try again
+      guess <- readline(paste0("Your guess must have 5 letters. Try again: "))
+    }
+    # Check if the guess is in the solution list
+    while (toupper(guess) %in% solution_list[,1] == F) {  #guess is checked to make sure it is in the solution list, if not the user is prompted to try again
       guess <- readline("This guess is not in the list of possible guesses. Try again: ")
     }
     #evaluate function is called
     evalGuess <- evaluate_guess(guess, solution)
     guessSplit <- str_split_1(guess, "")
-    guessSplit <- toupper(guessSplit)
-    #the keyboard is reduced to show what letters the user has not used
-    
+    guessSplit <- toupper(guessSplit) #the guess is split and capitalized so that it matches the formatting of the letters
+    #the list of letters is reduced to show what letters the user has not used
     lettersLeft <- setdiff(lettersLeft, guessSplit)
+    guess <- toupper(guess) #double checking the guess is capitalized
     #the users guess is printed above the evaluation
     print(paste(strsplit(guess, "")[[1]], collapse = " "))
     print(paste(evalGuess, collapse = " "))
     
-    if(all(evalGuess == "*")) {
+    if(all(evalGuess == "*")) { #if the guess is correct, the user is told
       print("Yay! You solved the wordle!")
       return(print(paste("You got the answer in ", guessNum, "guesses!")))
     }
   }
-  print(paste("You ran out of chances! The correct answer was", paste(solution, collapse = "")))
+  #if the user runs out of guesses, they are told they lost and what the solution was
+  print(paste("You ran out of guesses! The correct answer was", paste(solution, collapse = "")))
   return(print(paste("Guesses Used: ", guessNum)))
 }
+
 play_wordle(solution, solution_list, num_guesses = 6)
-pairs
-names
-/
-  
