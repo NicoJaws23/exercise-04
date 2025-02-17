@@ -4,6 +4,8 @@ format: html
 editor: visual
 ---
 
+
+
 # How to Code and Play Wordle in R
 
 ## Work Flow
@@ -24,14 +26,20 @@ In order to play wordle, we need to.....
 
 Before begining, we need the right tools for the job which in this case are the packages {tidyverse} and {sjmisc}
 
+
+
 ```{r}
 library(tidyverse)
 library(sjmisc)
 ```
 
+
+
 ## Load in Data
 
 We will need to large data sets to do this project, those being collins-scrabble-words-2019 and google-10000-english-usa-no-swears. To load then in, I will create a function called load_dictionary() which will take one argument (the name of the data set in the working directory). Additionally, in order to remove duplicate words, I will use the intersect() function to create a new list (solution_list) without duplicates
+
+
 
 ```{r}
 load_dictionary <- function(x) {
@@ -49,15 +57,19 @@ str(solution_list)
 solution_list <- intersect(valid_list, solution_list) #brings it down to 8336 obs
 ```
 
-The collins-scrabble-words-2019 (valid_list) has a total of 279,496 words, of these 12,972 are 5-letter words
 
-The google-10000-english-usa-no-swears (solution_list) has a total of 9,884 words, of these 1,210 are 5-letter words
 
-By using the intersect() function to ensure that the list of words is made of only of words present in path lists, we narrow down out list of total words to 8,336 words., of which 1,210 are 5-letter words.
+The collins-scrabble-words-2019 has a total of 279,496 words, of these 12,972 are 5-letter words
+
+The google-10000-english-usa-no-swears has a total of 9,884 words, of these 1,210 are 5-letter words
+
+By using the intersect() function to ensure that the list of words is made of only of words present in path lists, we narrow down out list of total words to 8,336 words.
 
 ## Pick A Solution
 
 Next we need to create a function which will go through a data set and randomly select one observation. For the purposes of the game, we need it to be a 5 letter word. This function will take a single argument which will be the list of possible solutions we created earlier. The result of this function being ran will be stored in a variable (solution) we will use later.
+
+
 
 ```{r}
 #this function picks a random word from the list that is 5 characters long
@@ -72,11 +84,15 @@ pick_solution <- function(x){
 solution <- pick_solution(solution_list)
 ```
 
+
+
 ## Create Game Play Functions
 
 We now have our answer to the game, but we still need a way for the user to play the Wordle. We will create 2 functions, one called play_wordle() to play the Wordle, and other called evaluate_guess() which will be nested within play_wordle() to evaluate the users guess against the solution. First we will create the evaluate_guess() function
 
 The evaluate_guess() function needs to take 2 arguments, the users guess and the solution to the Wordle. The function will take the users guess, ensure it is in all caps, split it into a 5 character vector and represent each character as "-". The, using a for() loop, the function will as if a character in the guess is also in the solution,. If the answer to this is false, the character will remain "-". But, if a character in the guess is in the solution but a different position, it will be changed to a "+". Finally, if the character in the guess is in the solution and the correct position, it will be changed to a "\*"
+
+
 
 ```{r}
 #this function will be called in the play_wordle function to evaluate the users guess
@@ -94,7 +110,11 @@ evaluate_guess <- function(guess, solution){
 }
 ```
 
+
+
 Now, we will create the function which allows the user to play Worlde. This function has 3 arguments, the solution to the Wordle, the list of possible solutions, and the number of guesses the user is allowed to use. The function first creates a field of upper case letters A through Z. Then a while loop is set up to run as long as the users number of guesses is less than 6 (num_guesses). The user is prompted to enter a guess which is checked to see if it is (A) 5 letters long and (B) a valid guess in the solution_list. The evaluate_guess function is then called to determine how the users guess compares to the solution. The users guess is then printed above the feedback from the evaluate_guess function. If the answer is correct, the user is told they completed the Wordle and told how many guesses it took them. If the guess does not match the solution, the user if prompted to guess again with a list of letters they have not tried yet. If the user runs out of guesses, they are told they lost and given the correct answer.
+
+
 
 ```{r}
 #this is the function for playing worlde
@@ -147,10 +167,15 @@ play_wordle <- function(solution, solution_list, num_guesses=6){
 }
 ```
 
+
+
 ## Playing The Game
 
 In order to play the game, the user runs this line of code which calls the play_wordle function with all the necessary arguments. I have my code set up as a comment right now because when I tried to render this page with it active, the loading got stuck at 92% FOREVER. I took my dog for a 15 minute walk and it was still on 92% but having it as a comment allowed the document to render right away. If the user wants to play the game they can just remove the \# in their R-Studio
 
+
+
 ```{r}
-#Wordle <- play_wordle(solution, solution_list, num_guesses = 6)
+Wordle <- play_wordle(solution, solution_list, num_guesses = 6)
 ```
+
