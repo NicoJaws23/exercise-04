@@ -113,83 +113,52 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="preliminaries">Preliminaries</h2>
 <p>Before begining, we need the right tools for the job which in this case are the packages {tidyverse} and {sjmisc}</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-✔ purrr     1.0.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sjmisc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'sjmisc' was built under R version 4.4.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'sjmisc'
-
-The following object is masked from 'package:purrr':
-
-    is_empty
-
-The following object is masked from 'package:tidyr':
-
-    replace_na
-
-The following object is masked from 'package:tibble':
-
-    add_case</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sjmisc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="load-in-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-in-data">Load in Data</h2>
 <p>We will need to large data sets to do this project, those being collins-scrabble-words-2019 and google-10000-english-usa-no-swears. To load then in, I will create a function called load_dictionary() which will take one argument (the name of the data set in the working directory). Additionally, in order to remove duplicate words, I will use the intersect() function to create a new list (solution_list) without duplicates</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>load_dictionary <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  name <span class="ot">&lt;-</span> <span class="fu">read.table</span>(x, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>f1 <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/difiore/ada-datasets/refs/heads/main/collins-scrabble-words-2019.txt"</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>valid_list <span class="ot">&lt;-</span> <span class="fu">load_dictionary</span>(f1)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#starts at 9884 obervations</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>f2 <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/difiore/ada-datasets/refs/heads/main/google-10000-english-usa-no-swears.txt"</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>solution_list <span class="ot">&lt;-</span> <span class="fu">load_dictionary</span>(f2)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(valid_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>load_dictionary <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  name <span class="ot">&lt;-</span> <span class="fu">read.table</span>(x, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>f1 <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/difiore/ada-datasets/refs/heads/main/collins-scrabble-words-2019.txt"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>valid_list <span class="ot">&lt;-</span> <span class="fu">load_dictionary</span>(f1)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#starts at 9884 obervations</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>f2 <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/difiore/ada-datasets/refs/heads/main/google-10000-english-usa-no-swears.txt"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>solution_list <span class="ot">&lt;-</span> <span class="fu">load_dictionary</span>(f2)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(valid_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   279496 obs. of  1 variable:
  $ words: chr  "AA" "AAH" "AAHED" "AAHING" ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(solution_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(solution_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   9884 obs. of  1 variable:
  $ words: chr  "THE" "OF" "AND" "TO" ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>solution_list <span class="ot">&lt;-</span> <span class="fu">intersect</span>(valid_list, solution_list) <span class="co">#brings it down to 8336 obs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>solution_list <span class="ot">&lt;-</span> <span class="fu">intersect</span>(valid_list, solution_list) <span class="co">#brings it down to 8336 obs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The collins-scrabble-words-2019 has a total of 279,496 words, of these 12,972 are 5-letter words</p>
-<p>The google-10000-english-usa-no-swears has a total of 9,884 words, of these 1,210 are 5-letter words</p>
-<p>By using the intersect() function to ensure that the list of words is made of only of words present in path lists, we narrow down out list of total words to 8,336 words.</p>
+<p>The collins-scrabble-words-2019 (valid_list) has a total of 279,496 words, of these 12,972 are 5-letter words</p>
+<p>The google-10000-english-usa-no-swears (solution_list) has a total of 9,884 words, of these 1,210 are 5-letter words</p>
+<p>By using the intersect() function to ensure that the list of words is made of only of words present in path lists, we narrow down out list of total words to 8,336 words., of which 1,210 are 5-letter words.</p>
 </section>
 <section id="pick-a-solution" class="level2">
 <h2 class="anchored" data-anchor-id="pick-a-solution">Pick A Solution</h2>
 <p>Next we need to create a function which will go through a data set and randomly select one observation. For the purposes of the game, we need it to be a 5 letter word. This function will take a single argument which will be the list of possible solutions we created earlier. The result of this function being ran will be stored in a variable (solution) we will use later.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#this function picks a random word from the list that is 5 characters long</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>pick_solution <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> x <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">str_length</span>(x[,<span class="dv">1</span>]) <span class="sc">==</span> <span class="dv">5</span>) <span class="co">#filters for 5 letter words</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">as.character</span>(d[,<span class="dv">1</span>]), <span class="dv">1</span>) <span class="co">#selects a random word from the data</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">&lt;-</span> <span class="fu">str_split_1</span>(w, <span class="st">""</span>) <span class="co">#splits the word into a single character vector</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(w)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#this variable applies the function to the solution list to store 1 word as a 5 character vector</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>solution <span class="ot">&lt;-</span> <span class="fu">pick_solution</span>(solution_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#this function picks a random word from the list that is 5 characters long</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pick_solution <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> x <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">str_length</span>(x[,<span class="dv">1</span>]) <span class="sc">==</span> <span class="dv">5</span>) <span class="co">#filters for 5 letter words</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">as.character</span>(d[,<span class="dv">1</span>]), <span class="dv">1</span>) <span class="co">#selects a random word from the data</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">&lt;-</span> <span class="fu">str_split_1</span>(w, <span class="st">""</span>) <span class="co">#splits the word into a single character vector</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(w)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#this variable applies the function to the solution list to store 1 word as a 5 character vector</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>solution <span class="ot">&lt;-</span> <span class="fu">pick_solution</span>(solution_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="create-game-play-functions" class="level2">
@@ -197,72 +166,80 @@ The following object is masked from 'package:tibble':
 <p>We now have our answer to the game, but we still need a way for the user to play the Wordle. We will create 2 functions, one called play_wordle() to play the Wordle, and other called evaluate_guess() which will be nested within play_wordle() to evaluate the users guess against the solution. First we will create the evaluate_guess() function</p>
 <p>The evaluate_guess() function needs to take 2 arguments, the users guess and the solution to the Wordle. The function will take the users guess, ensure it is in all caps, split it into a 5 character vector and represent each character as “-”. The, using a for() loop, the function will as if a character in the guess is also in the solution,. If the answer to this is false, the character will remain “-”. But, if a character in the guess is in the solution but a different position, it will be changed to a “+”. Finally, if the character in the guess is in the solution and the correct position, it will be changed to a “*”</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#this function will be called in the play_wordle function to evaluate the users guess</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>evaluate_guess <span class="ot">&lt;-</span> <span class="cf">function</span>(guess, solution){</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  guess <span class="ot">&lt;-</span> <span class="fu">toupper</span>(guess) <span class="co">#makes sure guess is in all caps</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  guess <span class="ot">&lt;-</span> <span class="fu">str_split_1</span>(guess, <span class="st">""</span>) <span class="co">#splits the guess into a 5 character vector</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  e <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">"-"</span>, <span class="dv">5</span>) <span class="co">#stores the feedback of each letter, initially as "-"</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>){ <span class="co">#for loop determining feedback for each of the 5 characters</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(guess[i] <span class="sc">%in%</span> solution <span class="sc">==</span> F){} <span class="co">#if character is not in solution, do nothing</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>{ <span class="cf">if</span> (guess[i] <span class="sc">!=</span> solution[i]) {e[i] <span class="ot">=</span> <span class="st">"+"</span>} <span class="co">#if character is in solution but wrong position, change to "+"</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>      <span class="cf">else</span>{e[i] <span class="ot">=</span> <span class="st">"*"</span>}} <span class="co">#if character is in solution and correct position, change to "*"</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  e <span class="ot">&lt;-</span> <span class="fu">paste</span>(e) <span class="co">#updates e to be combination of "-" "+" "*"</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(e)</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#this function will be called in the play_wordle function to evaluate the users guess</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>evaluate_guess <span class="ot">&lt;-</span> <span class="cf">function</span>(guess, solution){</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  guess <span class="ot">&lt;-</span> <span class="fu">toupper</span>(guess) <span class="co">#makes sure guess is in all caps</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  guess <span class="ot">&lt;-</span> <span class="fu">str_split_1</span>(guess, <span class="st">""</span>) <span class="co">#splits the guess into a 5 character vector</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  e <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">"-"</span>, <span class="dv">5</span>) <span class="co">#stores the feedback of each letter, initially as "-"</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>){ <span class="co">#for loop determining feedback for each of the 5 characters</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(guess[i] <span class="sc">%in%</span> solution <span class="sc">==</span> F){} <span class="co">#if character is not in solution, do nothing</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>{ <span class="cf">if</span> (guess[i] <span class="sc">!=</span> solution[i]) {e[i] <span class="ot">=</span> <span class="st">"+"</span>} <span class="co">#if character is in solution but wrong position, change to "+"</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>      <span class="cf">else</span>{e[i] <span class="ot">=</span> <span class="st">"*"</span>}} <span class="co">#if character is in solution and correct position, change to "*"</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  e <span class="ot">&lt;-</span> <span class="fu">paste</span>(e) <span class="co">#updates e to be combination of "-" "+" "*"</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(e)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now, we will create the function which allows the user to play Worlde. This function has 3 arguments, the solution to the Wordle, the list of possible solutions, and the number of guesses the user is allowed to use. The function first creates a field of upper case letters A through Z. Then a while loop is set up to run as long as the users number of guesses is less than 6 (num_guesses). The user is prompted to enter a guess which is checked to see if it is (A) 5 letters long and (B) a valid guess in the solution_list. The evaluate_guess function is then called to determine how the users guess compares to the solution. The users guess is then printed above the feedback from the evaluate_guess function. If the answer is correct, the user is told they completed the Wordle and told how many guesses it took them. If the guess does not match the solution, the user if prompted to guess again with a list of letters they have not tried yet. If the user runs out of guesses, they are told they lost and given the correct answer.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#this is the function for playing worlde</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>play_wordle <span class="ot">&lt;-</span> <span class="cf">function</span>(solution, solution_list, <span class="at">num_guesses=</span><span class="dv">6</span>){</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Welcome to Wordle. You have"</span>, num_guesses, <span class="st">"chances to guess the 5-letter word"</span>))</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Start guessing</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  guessNum <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  lettersLeft <span class="ot">&lt;-</span> <span class="fu">toupper</span>(LETTERS) <span class="co">#sets up list of letters</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#this loop runs as long as the number of guesses entered is less than the number of guesses allowed by the game</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>(guessNum <span class="sc">&lt;</span> num_guesses) {</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#show letters left</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(<span class="fu">c</span>(<span class="st">"Letters left: "</span>, lettersLeft), <span class="at">collapse =</span> <span class="st">" "</span>))</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">#user adds a guess and the number of guesses is updated </span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    guessNum <span class="ot">&lt;-</span> guessNum <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    guess <span class="ot">&lt;-</span> <span class="fu">readline</span>(<span class="fu">paste0</span>(<span class="st">"Enter guess "</span>, guessNum, <span class="st">": "</span>))</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    guess <span class="ot">&lt;-</span> <span class="fu">toupper</span>(guess)</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span>(<span class="fu">nchar</span>(guess) <span class="sc">!=</span> <span class="dv">5</span>){ <span class="co">#guess is checked to make sure it has 5 letters, if not the user ir prompted to try again</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>      guess <span class="ot">&lt;-</span> <span class="fu">readline</span>(<span class="fu">paste0</span>(<span class="st">"Your guess must have 5 letters. Try again: "</span>))</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check if the guess is in the solution list</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> (<span class="fu">toupper</span>(guess) <span class="sc">%in%</span> solution_list[,<span class="dv">1</span>] <span class="sc">==</span> F) {  <span class="co">#guess is checked to make sure it is in the solution list, if not the user is prompted to try again</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>      guess <span class="ot">&lt;-</span> <span class="fu">readline</span>(<span class="st">"This guess is not in the list of possible guesses. Try again: "</span>)</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">#evaluate function is called</span></span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    evalGuess <span class="ot">&lt;-</span> <span class="fu">evaluate_guess</span>(guess, solution)</span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    guessSplit <span class="ot">&lt;-</span> <span class="fu">str_split_1</span>(guess, <span class="st">""</span>)</span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    guessSplit <span class="ot">&lt;-</span> <span class="fu">toupper</span>(guessSplit) <span class="co">#the guess is split and capitalized so that it matches the formatting of the letters</span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">#the list of letters is reduced to show what letters the user has not used</span></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    lettersLeft <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(lettersLeft, guessSplit)</span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    guess <span class="ot">&lt;-</span> <span class="fu">toupper</span>(guess) <span class="co">#double checking the guess is capitalized</span></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">#the users guess is printed above the evaluation</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(<span class="fu">strsplit</span>(guess, <span class="st">""</span>)[[<span class="dv">1</span>]], <span class="at">collapse =</span> <span class="st">" "</span>))</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(evalGuess, <span class="at">collapse =</span> <span class="st">" "</span>))</span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">all</span>(evalGuess <span class="sc">==</span> <span class="st">"*"</span>)) { <span class="co">#if the guess is correct, the user is told</span></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(<span class="st">"Yay! You solved the wordle!"</span>)</span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"You got the answer in "</span>, guessNum, <span class="st">"guesses!"</span>)))</span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>  <span class="co">#if the user runs out of guesses, they are told they lost and what the solution was</span></span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"You ran out of guesses! The correct answer was"</span>, <span class="fu">paste</span>(solution, <span class="at">collapse =</span> <span class="st">""</span>)))</span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Guesses Used: "</span>, guessNum)))</span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#this is the function for playing worlde</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>play_wordle <span class="ot">&lt;-</span> <span class="cf">function</span>(solution, solution_list, <span class="at">num_guesses=</span><span class="dv">6</span>){</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Welcome to Wordle. You have"</span>, num_guesses, <span class="st">"chances to guess the 5-letter word"</span>))</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Start guessing</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  guessNum <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  lettersLeft <span class="ot">&lt;-</span> <span class="fu">toupper</span>(LETTERS) <span class="co">#sets up list of letters</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  feedbackHist <span class="ot">&lt;-</span> <span class="fu">c</span>() <span class="co">#this vector stores each evaluation created by the evaluate_guess function</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#this loop runs as long as the number of guesses entered is less than the number of guesses allowed by the game</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>(guessNum <span class="sc">&lt;</span> num_guesses) {</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">#show letters left</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(<span class="fu">c</span>(<span class="st">"Letters left: "</span>, lettersLeft), <span class="at">collapse =</span> <span class="st">" "</span>))</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#user adds a guess and the number of guesses is updated </span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    guessNum <span class="ot">&lt;-</span> guessNum <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    guess <span class="ot">&lt;-</span> <span class="fu">readline</span>(<span class="fu">paste0</span>(<span class="st">"Enter guess "</span>, guessNum, <span class="st">": "</span>))</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    guess <span class="ot">&lt;-</span> <span class="fu">toupper</span>(guess)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span>(<span class="fu">nchar</span>(guess) <span class="sc">!=</span> <span class="dv">5</span>){ <span class="co">#guess is checked to make sure it has 5 letters, if not the user ir prompted to try again</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>      guess <span class="ot">&lt;-</span> <span class="fu">readline</span>(<span class="fu">paste0</span>(<span class="st">"Your guess must have 5 letters. Try again: "</span>))</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check if the guess is in the solution list</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> (<span class="fu">toupper</span>(guess) <span class="sc">%in%</span> solution_list[,<span class="dv">1</span>] <span class="sc">==</span> F) {  <span class="co">#guess is checked to make sure it is in the solution list, if not the user is prompted to try again</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>      guess <span class="ot">&lt;-</span> <span class="fu">readline</span>(<span class="st">"This guess is not in the list of possible guesses. Try again: "</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">#evaluate function is called</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    evalGuess <span class="ot">&lt;-</span> <span class="fu">evaluate_guess</span>(guess, solution)</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    feedbackHist <span class="ot">&lt;-</span> <span class="fu">c</span>(feedbackHist, <span class="fu">paste</span>(<span class="st">"Guess"</span>, guessNum, <span class="st">":"</span>, guess, <span class="fu">paste</span>(evalGuess, <span class="at">collapse =</span> <span class="st">""</span>), <span class="st">"; "</span>)) <span class="co">#stores each guess number, the users</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">#guess, and the evaluation of the guess. This then adds it to the initial feedbackHist variable to be called on later</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    guessSplit <span class="ot">&lt;-</span> <span class="fu">str_split_1</span>(guess, <span class="st">""</span>)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    guessSplit <span class="ot">&lt;-</span> <span class="fu">toupper</span>(guessSplit) <span class="co">#the guess is split and capitalized so that it matches the formatting of the letters</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">#the list of letters is reduced to show what letters the user has not used</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>    lettersLeft <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(lettersLeft, guessSplit)</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    guess <span class="ot">&lt;-</span> <span class="fu">toupper</span>(guess) <span class="co">#double checking the guess is capitalized</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">#the users guess is printed above the evaluation</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(<span class="fu">strsplit</span>(guess, <span class="st">""</span>)[[<span class="dv">1</span>]], <span class="at">collapse =</span> <span class="st">" "</span>))</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(evalGuess, <span class="at">collapse =</span> <span class="st">" "</span>))</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span>(<span class="fu">all</span>(evalGuess <span class="sc">==</span> <span class="st">"*"</span>)) { <span class="co">#if the guess is correct, the user is told and then given their feedback history</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(<span class="st">"Yay! You solved the wordle!"</span>)</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"You got the answer in "</span>, guessNum, <span class="st">"guesses! Below is your guess history:"</span>))</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(<span class="fu">paste</span>(feedbackHist, <span class="at">collapse =</span> <span class="st">" "</span>))</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Congratulations on getting today's wordle!"</span>)))</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>  <span class="co">#if the user runs out of guesses, they are told they lost, what the solution was, and their total feedback history</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"You ran out of guesses! The correct answer was"</span>, <span class="fu">paste</span>(solution, <span class="at">collapse =</span> <span class="st">""</span>)))</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(feedbackHist, <span class="at">collapse =</span> <span class="st">""</span>))</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">print</span>(<span class="st">"Better luck next time!"</span>))</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="playing-the-game" class="level2">
 <h2 class="anchored" data-anchor-id="playing-the-game">Playing The Game</h2>
-<p>In order to play the game, the user runs this line of code which calls the play_wordle function with all the necessary arguments. I have my code set up as a comment right now because when I tried to render this page with it active, the loading got stuck at 92% FOREVER. I took my dog for a 15 minute walk and it was still on 92% but having it as a comment allowed the document to render right away. If the user wants to play the game they can just remove the # in their R-Studio</p>
+<p>In order to play the game, the user runs this line of code which calls the play_wordle function with all the necessary arguments.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Wordle &lt;- play_wordle(solution, solution_list, num_guesses = 6)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Wordle <span class="ot">&lt;-</span> <span class="fu">play_wordle</span>(solution, solution_list, <span class="at">num_guesses =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Here is a picture of an example output from my R console window</p>
+<p><img src="images/clipboard-2901781207.png" class="img-fluid"></p>
 </section>
 </section>
 

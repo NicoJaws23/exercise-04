@@ -25,6 +25,8 @@ In order to play wordle, we need to.....
 Before begining, we need the right tools for the job which in this case are the packages {tidyverse} and {sjmisc}
 
 ```{r}
+#| message: false
+#| warning: false
 library(tidyverse)
 library(sjmisc)
 ```
@@ -149,8 +151,14 @@ play_wordle <- function(solution, solution_list, num_guesses=6){
 
 ## Playing The Game
 
-In order to play the game, the user runs this line of code which calls the play_wordle function with all the necessary arguments. I have my code set up as a comment right now because when I tried to render this page with it active, the loading got stuck at 92% FOREVER. I took my dog for a 15 minute walk and it was still on 92% but having it as a comment allowed the document to render right away. If the user wants to play the game they can just remove the \# in their R-Studio
+In order to play the game, the user runs this line of code which calls the play_wordle function with all the necessary arguments.
 
 ```{r}
-#Wordle <- play_wordle(solution, solution_list, num_guesses = 6)
+#| eval: false
+
+Wordle <- play_wordle(solution, solution_list, num_guesses = 6)
 ```
+
+Here is a picture of an example output from my R console window
+
+![](images/clipboard-2901781207.png)
